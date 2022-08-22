@@ -17,6 +17,9 @@ export default {
       extension: 'ts',
       directory: 'src/database/migrations',
     },
+    seeds: {
+      directory: 'src/database/seeds',
+    },
   },
 };
 

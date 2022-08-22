@@ -2,9 +2,10 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('cities', table => {
-    table.string('id').primary();
+    table;
+    table.integer('id').unsigned().unique().notNullable().primary();
     table.string('name').primary();
-    table.string('state_id').notNullable();
+    table.integer('state_id').unsigned().notNullable();
     table
       .foreign('state_id')
       .references('id')

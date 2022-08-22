@@ -2,10 +2,15 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('employees', table => {
-    table.string('id').primary();
+    table
+      .uuid('id')
+      .unique()
+      .notNullable()
+      .primary()
+      .defaultTo(knex.raw('uuid_generate_v4()'));
     table.string('name', 255).notNullable();
     table.string('document_number', 12).notNullable().unique();
-    table.string('city_id');
+    table.integer('city_id').unsigned();
     table
       .foreign('city_id')
       .references('id')
