@@ -3,6 +3,7 @@ import { IEmploye } from '@modules/employees/domain/models/IEmploye';
 import { IEmployeesRepository } from '@modules/employees/domain/repositories/IEmployeesRepository';
 
 import { db } from '@config/database';
+import { IUpdateEmploye } from '@modules/employees/domain/models/IUpdateEmploye';
 
 class EmployeesRepository implements IEmployeesRepository {
   public async findAll(): Promise<IEmploye[] | undefined> {
@@ -17,12 +18,15 @@ class EmployeesRepository implements IEmployeesRepository {
     return employe[0];
   }
 
-  public async findByEmail(email: string): Promise<IEmploye | undefined> {
+  public async findByDocumentNumber(
+    documentNumber: string,
+  ): Promise<IEmploye | undefined> {
     const employe = await db<IEmploye>('employees')
       .select()
-      .where('email', email);
+      .where('document_number', documentNumber)
+      .first();
 
-    return employe[0];
+    return employe;
   }
 
   public async create(data: ICreateEmploye): Promise<IEmploye> {
@@ -34,6 +38,10 @@ class EmployeesRepository implements IEmployeesRepository {
 
     return employe[0];
   }
+
+  // public async update(data: IUpdateEmploye): Promise<IEmploye> {
+  //   // const employeId
+  // }
 
   public async delete(id: string): Promise<void> {
     await db('employees').where('id', id).del();

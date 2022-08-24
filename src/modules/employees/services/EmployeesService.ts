@@ -1,7 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
+import AppError from '@shared/errors/AppError';
 import { ICreateEmploye } from '../domain/models/ICreateEmploye';
 import { IEmploye } from '../domain/models/IEmploye';
+import { IUpdateEmploye } from '../domain/models/IUpdateEmploye';
 import { IEmployeesRepository } from '../domain/repositories/IEmployeesRepository';
 
 @injectable()
@@ -18,13 +20,23 @@ class EmployeesService {
   }
 
   public async create(data: ICreateEmploye): Promise<IEmploye> {
+    const documentExists = await this.employeesRepository.findByDocumentNumber(
+      data.document_number,
+    );
+
+    if (documentExists) {
+      throw new AppError('document number already used.');
+    }
+
     const employe = await this.employeesRepository.create(data);
 
     return employe;
   }
 
-  // public async update(data: IUpdateCompany): Promise<ICompany> {
-  //   const company
+  // public async update(data: IUpdateEmploye): Promise<IEmploye> {
+  //   const employe = await this.employeesRepository.update(data);
+
+  //   return employe;
   // }
 
   public async show(id: string): Promise<IEmploye | undefined> {

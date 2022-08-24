@@ -1,3 +1,4 @@
+import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import { ICompany } from '../domain/models/ICompany';
 import { ICreateCompany } from '../domain/models/ICreateCompany';
@@ -20,6 +21,12 @@ class CompaniesService {
   }
 
   public async create(data: ICreateCompany): Promise<ICompany> {
+    const emailExists = await this.companiesRepository.findByEmail(data.email);
+
+    if (emailExists) {
+      throw new AppError('Email already used.');
+    }
+
     const company = await this.companiesRepository.create(data);
 
     return company;

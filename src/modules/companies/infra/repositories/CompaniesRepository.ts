@@ -9,7 +9,7 @@ class CompaniesRepository implements ICompaniesRepository {
   constructor() {}
 
   public async findAll(): Promise<ICompany[] | undefined> {
-    const companies = await db<ICompany>('companies');
+    const companies = await db<ICompany>('companies').select();
 
     return companies;
   }

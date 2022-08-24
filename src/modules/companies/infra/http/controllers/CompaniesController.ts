@@ -31,14 +31,14 @@ class CompaniesController {
     return res.json(company);
   }
 
-  public async delete(req: Request, res: Response): Promise<Response> {
+  public async destroy(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
     const companiesService = container.resolve(CompaniesService);
 
     await companiesService.delete(id);
 
-    return res.json([]);
+    return res.status(204);
   }
 }
 
