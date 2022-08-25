@@ -1,18 +1,19 @@
 import { ICompany } from '../models/ICompany';
 import { ICreateCompany } from '../models/ICreateCompany';
-// import { IUpdateCompany } from '../models/IUpdateCompany';
-import { IDeleteCompany } from '../models/IDeleteCompany';
+import { IUpdateCompany } from '../models/IUpdateCompany';
 
 export interface ICompaniesRepository {
-  findAll(): Promise<ICompany[] | undefined>;
+  findAll(): Promise<ICompany[]>;
 
   findByEmail(email: string): Promise<ICompany | undefined>;
+
+  findByDocumentNumber(documentNumber: string): Promise<ICompany | undefined>;
 
   findById(id: string): Promise<ICompany | undefined>;
 
   create(data: ICreateCompany): Promise<ICompany>;
 
-  // update(data: IUpdateCompany): Promise<ICompany>;
+  save(data: ICompany): Promise<ICompany>;
 
   delete(id: string): Promise<void>;
 }

@@ -31,6 +31,17 @@ class CompaniesController {
     return res.json(company);
   }
 
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const data = req.body;
+
+    const companiesService = container.resolve(CompaniesService);
+
+    const company = await companiesService.update({ id, ...data });
+
+    return res.json(company);
+  }
+
   public async destroy(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 

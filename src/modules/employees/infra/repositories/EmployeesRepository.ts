@@ -3,7 +3,6 @@ import { IEmploye } from '@modules/employees/domain/models/IEmploye';
 import { IEmployeesRepository } from '@modules/employees/domain/repositories/IEmployeesRepository';
 
 import { db } from '@config/database';
-import { IUpdateEmploye } from '@modules/employees/domain/models/IUpdateEmploye';
 
 class EmployeesRepository implements IEmployeesRepository {
   public async findAll(): Promise<IEmploye[] | undefined> {
@@ -13,9 +12,12 @@ class EmployeesRepository implements IEmployeesRepository {
   }
 
   public async findById(id: string): Promise<IEmploye | undefined> {
-    const employe = await db<IEmploye>('employe').select().where('id', id);
+    const employe = await db<IEmploye>('employe')
+      .select()
+      .where('id', id)
+      .first();
 
-    return employe[0];
+    return employe;
   }
 
   public async findByDocumentNumber(
@@ -32,16 +34,18 @@ class EmployeesRepository implements IEmployeesRepository {
   public async create(data: ICreateEmploye): Promise<IEmploye> {
     const employeId = await db<IEmploye>('employees').insert(data, ['id']);
 
-    const employe = await db<IEmploye>('employees')
+    const [employe] = await db<IEmploye>('employees')
       .select()
       .where('id', employeId);
 
-    return employe[0];
+    return employe;
   }
 
-  // public async update(data: IUpdateEmploye): Promise<IEmploye> {
-  //   // const employeId
-  // }
+  public async save(employe: IEmploye): Promise<IEmploye> {
+    await db<IEmploye>('companies').where('id', employe.id).update(employe);
+
+    return employe;
+  }
 
   public async delete(id: string): Promise<void> {
     await db('employees').where('id', id).del();

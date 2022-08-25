@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
-import { body, param, validationResult } from 'express-validator';
 import CompaniesController from '../controllers/CompaniesController';
-
+import { celebrate, Joi, Segments } from 'celebrate';
 const router = Router();
 const companiesController = new CompaniesController();
 
@@ -9,34 +8,53 @@ router.get('/', companiesController.list);
 
 router.get(
   '/:id',
-  param('id').isUUID().notEmpty(),
-  (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-  },
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
   companiesController.show,
 );
 
 router.post(
   '/',
-  body('name').isString().notEmpty().isLength({ min: 2, max: 255 }),
-  body('email').isEmail().notEmpty().isLength({ min: 8, max: 255 }),
-  body('document_number').isNumeric().notEmpty().isLength({ min: 11, max: 11 }),
-  body('city_id').isNumeric().notEmpty(),
-  body('neighborhood').isString().notEmpty().isLength({ min: 1, max: 255 }),
-  body('street').notEmpty().isLength({ max: 255 }),
-  body('address_number').notEmpty().isLength({ max: 10 }),
-  (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-  },
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      document_number: Joi.string().required(),
+      city_id: Joi.number().required(),
+      street: Joi.string().required(),
+      neighborhood: Joi.string().required(),
+      address_number: Joi.string().required(),
+    },
+  }),
   companiesController.create,
 );
 
-router.delete('/:id', companiesController.destroy);
+router.put(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      name: Joi.string(),
+      email: Joi.string().email(),
+      document_number: Joi.string(),
+      city_id: Joi.number(),
+      street: Joi.string(),
+      neighborhood: Joi.string(),
+      address_number: Joi.string(),
+    },
+  }),
+  companiesController.update,
+);
+
+router.delete(
+  '/:id',
+  celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
+  companiesController.destroy,
+);
 
 export default router;
