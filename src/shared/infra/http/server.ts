@@ -1,12 +1,7 @@
-import express, { NextFunction, Request, Response } from 'express';
-import cors from 'cors';
+import 'reflect-metadata';
+import 'dotenv/config';
+import { app } from './app';
 
-const app = express();
-
-app.use(cors());
-
-app.use(express.json());
-
-app.listen(3333, () => {
-  console.log('Server started at port 3333');
+app.listen(process.env.PORT || 3333, () => {
+  console.log(`Server started on port ${process.env.PORT || 3333}!`);
 });
