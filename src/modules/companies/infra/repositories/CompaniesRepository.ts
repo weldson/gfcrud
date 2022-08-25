@@ -16,11 +16,6 @@ class CompaniesRepository implements ICompaniesRepository {
   public async findById(id: string): Promise<ICompany | undefined> {
     const company = await db<ICompany>('companies')
       .select()
-      .innerJoin(
-        'company_employe',
-        'companies.id',
-        'company_employe.company_id',
-      )
       .where('companies.id', id)
       .first();
 

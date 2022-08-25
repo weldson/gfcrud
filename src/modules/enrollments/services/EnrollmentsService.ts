@@ -1,36 +1,27 @@
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@shared/errors/AppError';
+import { ICompanyEmployeesRepository } from '../domain/repositories/ICompanyEmployeesRepository';
+import { ICompanyEmploye } from '../domain/models/ICompanyEmploye';
 
 @injectable()
 class EnrollmentsService {
   constructor(
-    @inject('EmployeesRepository')
-    private employeesRepository: IEmployeesRepository,
+    @inject('CompanyEmployeesRepository')
+    private companyEmployeesRepository: ICompanyEmployeesRepository,
   ) {}
 
-  public async list(id: string): Promise<IEmploye[] | undefined> {
-    const employees = await this.employeesRepository.findAll();
-
-    return employees;
-  }
-
-  public async create(data: ICreateEmploye): Promise<IEmploye> {
-    const documentExists = await this.employeesRepository.findByDocumentNumber(
-      data.document_number,
+  public async create(data: ICompanyEmploye): Promise<void> {
+    await this.companyEmployeesRepository.create(
+      data.company_id,
+      data.employe_id,
     );
-
-    if (documentExists) {
-      throw new AppError('document number already used.');
-    }
-
-    const employe = await this.employeesRepository.create(data);
-
-    return employe;
   }
 
-  public async delete(id: string): Promise<void> {
-    await this.employeesRepository.delete(id);
+  public async delete(data: ICompanyEmploye): Promise<void> {
+    await this.companyEmployeesRepository.delete(
+      data.company_id,
+      data.employe_id,
+    );
   }
 }
 

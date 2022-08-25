@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 import CompaniesController from '../controllers/CompaniesController';
 import { celebrate, Joi, Segments } from 'celebrate';
 const router = Router();
@@ -20,13 +20,13 @@ router.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      document_number: Joi.string().required(),
+      name: Joi.string().required().min(2).max(255),
+      email: Joi.string().email().required().min(6).max(255),
+      document_number: Joi.string().required().length(14),
       city_id: Joi.number().required(),
-      street: Joi.string().required(),
-      neighborhood: Joi.string().required(),
-      address_number: Joi.string().required(),
+      street: Joi.string().required().max(255),
+      neighborhood: Joi.string().required().min(2).max(255),
+      address_number: Joi.string().required().max(4),
     },
   }),
   companiesController.create,
@@ -39,13 +39,13 @@ router.put(
       id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
-      name: Joi.string(),
-      email: Joi.string().email(),
-      document_number: Joi.string(),
+      name: Joi.string().min(2).max(255),
+      email: Joi.string().email().min(6).max(255),
+      document_number: Joi.string().length(14),
       city_id: Joi.number(),
-      street: Joi.string(),
-      neighborhood: Joi.string(),
-      address_number: Joi.string(),
+      street: Joi.string().max(255),
+      neighborhood: Joi.string().min(2).max(255),
+      address_number: Joi.string().max(4),
     },
   }),
   companiesController.update,

@@ -12,7 +12,7 @@ class EmployeesRepository implements IEmployeesRepository {
   }
 
   public async findById(id: string): Promise<IEmploye | undefined> {
-    const employe = await db<IEmploye>('employe')
+    const employe = await db<IEmploye>('employees')
       .select()
       .where('id', id)
       .first();

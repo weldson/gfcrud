@@ -33,11 +33,31 @@ class EmployeesService {
     return employe;
   }
 
-  // public async update(data: IUpdateEmploye): Promise<IEmploye> {
-  //   const employe = await this.employeesRepository.update(data);
+  public async update(data: IUpdateEmploye): Promise<IEmploye> {
+    const employe = await this.employeesRepository.findById(data.id);
 
-  //   return employe;
-  // }
+    if (!employe) {
+      throw new AppError('Employe not found!');
+    }
+
+    const documentNumberExists =
+      await this.employeesRepository.findByDocumentNumber(data.document_number);
+
+    if (documentNumberExists && employe.id !== documentNumberExists.id) {
+      throw new AppError('Document number alredy used!');
+    }
+
+    employe.name = data.name;
+    employe.address_number = data.address_number;
+    employe.city_id = data.city_id;
+    employe.street = data.street;
+    employe.document_number = data.document_number;
+    employe.neighborhood = data.neighborhood;
+
+    await this.employeesRepository.save(employe);
+
+    return employe;
+  }
 
   public async show(id: string): Promise<IEmploye | undefined> {
     const employe = await this.employeesRepository.findById(id);

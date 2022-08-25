@@ -2,8 +2,6 @@ import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import { ICompany } from '../domain/models/ICompany';
 import { ICreateCompany } from '../domain/models/ICreateCompany';
-import { IDeleteCompany } from '../domain/models/IDeleteCompany';
-import { IShowCompany } from '../domain/models/IShowCompany';
 import { IUpdateCompany } from '../domain/models/IUpdateCompany';
 import { ICompaniesRepository } from '../domain/repositories/ICompaniesRepository';
 

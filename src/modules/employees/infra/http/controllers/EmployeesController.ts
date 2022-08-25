@@ -32,16 +32,16 @@ class EmployeesController {
     return res.json(employe);
   }
 
-  // public async update(req: Request, res: Response): Promise<Response> {
-  //   const { id } = req.params;
-  //   const data = req.body;
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const data = req.body;
 
-  //   const employeesService = container.resolve(EmployeesService);
+    const employeesService = container.resolve(EmployeesService);
 
-  //   const employe = employeesService.update({ id, ...data });
+    const employe = await employeesService.update({ id, ...data });
 
-  //   return res.json(employe);
-  // }
+    return res.json(employe);
+  }
 
   public async destroy(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
@@ -50,7 +50,7 @@ class EmployeesController {
 
     await employeesService.delete(id);
 
-    return res.json([]);
+    return res.status(204).json();
   }
 }
 

@@ -17,18 +17,31 @@ router.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().uuid().required().length(250),
-      document_number: Joi.string().required(),
+      name: Joi.string().required().min(2).max(255),
+      document_number: Joi.string().required().length(11),
       city_id: Joi.number().required(),
-      street: Joi.string().required(),
-      neighborhood: Joi.string().required(),
-      address_number: Joi.string().required(),
+      street: Joi.string().required().max(255),
+      neighborhood: Joi.string().required().min(2).max(255),
+      address_number: Joi.string().required().max(4),
     },
   }),
   employeesController.create,
 );
 
-// router.put('/:id', employeesController.update);
+router.put(
+  '/:id',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().min(2).max(255),
+      document_number: Joi.string().length(11),
+      city_id: Joi.number(),
+      street: Joi.string().max(255),
+      neighborhood: Joi.string().min(2).max(255),
+      address_number: Joi.string().max(4),
+    },
+  }),
+  employeesController.update,
+);
 
 router.delete(
   '/:id',
