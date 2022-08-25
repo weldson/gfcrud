@@ -6,7 +6,7 @@ export interface ICompany {
   email: string;
   document_number: string;
   city_id: number;
-  employes: IEmploye[];
+  employees: IEmploye[];
   neighborhood: string;
   address_number: string;
   street: string;

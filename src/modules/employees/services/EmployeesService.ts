@@ -5,12 +5,15 @@ import { ICreateEmploye } from '../domain/models/ICreateEmploye';
 import { IEmploye } from '../domain/models/IEmploye';
 import { IUpdateEmploye } from '../domain/models/IUpdateEmploye';
 import { IEmployeesRepository } from '../domain/repositories/IEmployeesRepository';
+import { ICompanyEmployeesRepository } from '@modules/enrollments/domain/repositories/ICompanyEmployeesRepository';
 
 @injectable()
 class EmployeesService {
   constructor(
     @inject('EmployeesRepository')
     private employeesRepository: IEmployeesRepository,
+    @inject('CompanyEmployeesRepository')
+    private companyEmployeesRepository: ICompanyEmployeesRepository,
   ) {}
 
   public async list(): Promise<IEmploye[] | undefined> {
@@ -61,6 +64,13 @@ class EmployeesService {
 
   public async show(id: string): Promise<IEmploye | undefined> {
     const employe = await this.employeesRepository.findById(id);
+
+    if (employe) {
+      employe.companies =
+        await this.companyEmployeesRepository.findCompanyByEmployeId(
+          employe.id,
+        );
+    }
 
     return employe;
   }

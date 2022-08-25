@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { ICompanyEmployeesRepository } from '../domain/repositories/ICompanyEmployeesRepository';
 import { ICompanyEmploye } from '../domain/models/ICompanyEmploye';
+import { IEmploye } from '@modules/employees/domain/models/IEmploye';
 
 @injectable()
 class EnrollmentsService {

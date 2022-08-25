@@ -1,6 +1,5 @@
 import { ICompany } from '../models/ICompany';
 import { ICreateCompany } from '../models/ICreateCompany';
-import { IUpdateCompany } from '../models/IUpdateCompany';
 
 export interface ICompaniesRepository {
   findAll(): Promise<ICompany[]>;
