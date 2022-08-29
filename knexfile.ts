@@ -2,11 +2,11 @@ import { knex } from 'knex';
 
 export default {
   development: {
-    client: 'postgresql',
+    client: '',
     connection: {
-      database: 'gfcrud',
-      user: 'postgres',
-      password: 'password',
+      database: '',
+      user: '',
+      password: '',
     },
     pool: {
       min: 2,
